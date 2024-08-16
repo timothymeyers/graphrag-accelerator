@@ -19,8 +19,8 @@ jobs:
 
       - name: Replace environment variable tokens
         run: |
-          sed -i 's/__GRAPHRAG_API_BASE__/asdfasdfasdf/g' infra/deploy.parameters.json
-          #sed -i 's/__GRAPHRAG_API_BASE__/"${{ secrets.GRAPHRAG_API_BASE }}"/g' infra/deploy.parameters.json
+          #sed -i 's/__GRAPHRAG_API_BASE__/asdfasdfasdf/g' infra/deploy.parameters.json
+          sed -i 's/__GRAPHRAG_API_BASE__/"${{ secrets.GRAPHRAG_API_BASE }}"/g' infra/deploy.parameters.json
           # sed -i 's/{{SECRET_KEY}}/${{ secrets.SECRET_KEY }}/g' infra/deploy.parameters.json
           cat infra/deploy.parameters.json
 

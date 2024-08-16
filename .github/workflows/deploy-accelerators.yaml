@@ -11,6 +11,7 @@ jobs:
     strategy:
       matrix:
         environment: [Commercial, Government]
+        location: ${{ vars.LOCATIONS }}
     environment: ${{ matrix.environment }}
 
     steps:
@@ -21,7 +22,10 @@ jobs:
         env:
           GRAPHRAG_API_BASE: ${{ secrets.GRAPHRAG_API_BASE }}
           RESOURCE_GROUP: rg-gr-${{ matrix.environment }}-${{ github.run_number }}
+          LOCATION: ${{ matrix.location }}
         run: |
+          echo ${${{ matrix.environment }},,}"" | cut -c1-3
+
           #sed -i 's/__GRAPHRAG_API_BASE__/${{ env.GRAPHRAG_API_BASE }}/g' infra/deploy.parameters.json
 
           #cat infra/deploy.parameters.json

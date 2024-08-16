@@ -24,5 +24,5 @@ jobs:
           #sed -i 's/__GRAPHRAG_API_BASE__/${{ env.GRAPHRAG_API_BASE }}/g' infra/deploy.parameters.json
 
           #cat infra/deploy.parameters.json
-          #cd infra
+          cd infra
           ./deploy.sh -p deploy.parameters.json

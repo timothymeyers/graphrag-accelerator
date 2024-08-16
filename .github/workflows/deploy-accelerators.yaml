@@ -7,11 +7,11 @@ on:
 jobs:
 
   deploy:
-    environment: Commercial
     runs-on: ubuntu-latest
-    #strategy:
-    #  matrix:
-    #    environment: [Commercial, Government]
+    strategy:
+      matrix:
+        environment: [Commercial, Government]
+    environment: ${{ matrix.environment }}
 
     steps:
       - name: Check out the repository
@@ -20,7 +20,7 @@ jobs:
       - name: Replace environment variable tokens
         env:
           GRAPHRAG_API_BASE: ${{ secrets.GRAPHRAG_API_BASE }}
-          RESOURCE_GROUP: rg-gr-${{ jobs.deploy.environment }}-${{ github.run_number }}
+          RESOURCE_GROUP: rg-gr-${{ matrix.environment }}-${{ github.run_number }}
         run: |
           #sed -i 's/__GRAPHRAG_API_BASE__/${{ env.GRAPHRAG_API_BASE }}/g' infra/deploy.parameters.json
 

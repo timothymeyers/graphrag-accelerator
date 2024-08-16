@@ -7,11 +7,11 @@ on:
 jobs:
 
   deploy:
-    environment: Commercial
+    #environment: Commercial
     runs-on: ubuntu-latest
-    #strategy:
-    #  matrix:
-    #    environment: [Commercial, Government]
+    strategy:
+      matrix:
+        environment: [Commercial, Government]
 
     steps:
       - name: Check out the repository
@@ -26,4 +26,5 @@ jobs:
 
           #cat infra/deploy.parameters.json
           cd infra
-          ./deploy.sh -p deploy.parameters.json
+          echo "{}" >> ci.parameters.json
+          ./deploy.sh -p ci.parameters.json

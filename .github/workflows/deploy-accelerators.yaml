@@ -1,0 +1,24 @@
+name: Deploy Accelerator
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        location: [eastus2, westus2]
+        environment: [Commercial, Government]
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v2
+
+      - name: Replace environment variable tokens
+        run: |
+          sed -i 's/{{SECRET_KEY}}/${{ secrets.SECRET_KEY }}/g' infra/deploy.parameters.json
+          cat infra/deploy.parameters.json
+
+      - name: Print deploy.parameters.json
+        run: cat infra/deploy.parameters.json

@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         environment: [Commercial, Government]
-        location: ${{ fromJson('["' + vars.LOCATIONS.replace(',', '","') + '"]') }}
+        location: [eastus2]
     environment: ${{ matrix.environment }}
 
     steps:

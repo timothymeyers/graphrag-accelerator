@@ -21,9 +21,8 @@ jobs:
         env:
           GRAPHRAG_API_BASE: ${{ secrets.GRAPHRAG_API_BASE }}
         run: |
-          sed -i 's/__GRAPHRAG_API_BASE__/${{ env.GRAPHRAG_API_BASE }}/g' infra/deploy.parameters.json
+          #sed -i 's/__GRAPHRAG_API_BASE__/${{ env.GRAPHRAG_API_BASE }}/g' infra/deploy.parameters.json
 
-          cat infra/deploy.parameters.json
+          #cat infra/deploy.parameters.json
           #cd infra
-          #echo {"GRAPHRAG_API_BASE"="${{ secrets.GRAPHRAG_API_BASE }}" > deploy.parameters.test
-          #cat deploy.parameters.test
+          ./deploy.sh -p deploy.parameters.json

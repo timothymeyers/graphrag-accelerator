@@ -30,6 +30,14 @@ jobs:
 
           #cat infra/deploy.parameters.json
           cd infra
-          env
-          echo "{}" >> ci.parameters.json
+
+          cat <<EOF > ci.parameters.json
+          {
+            "LOCATION": "${{ matrix.location }}",
+            "RESOURCE_GROUP": "${{ env.RESOURCE_GROUP }}",
+            "GRAPHRAG_API_BASE": "${{ secrets.GRAPHRAG_API_BASE }}"
+          }
+          EOF
+          cat ci.parameters.json
+
           ./deploy.sh -p ci.parameters.json

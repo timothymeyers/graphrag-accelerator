@@ -30,5 +30,6 @@ jobs:
 
           #cat infra/deploy.parameters.json
           cd infra
+          env
           echo "{}" >> ci.parameters.json
           ./deploy.sh -p ci.parameters.json

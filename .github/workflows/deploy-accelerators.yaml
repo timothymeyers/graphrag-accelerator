@@ -13,10 +13,10 @@ jobs:
     strategy:
       matrix:
         environment: [Commercial]
-        location: [eastus2]
+        location: [eastus2,westus2]
     environment: ${{ matrix.environment }}
     env:
-      RESOURCE_GROUP: rg-gr-${{ matrix.environment }}-${{ github.run_number }}
+      RESOURCE_GROUP: rg-gr-${{ matrix.environment }}-${{ matrix.location }}-${{ github.run_number }}
       LOCATION: ${{ matrix.location }}
 
     steps:

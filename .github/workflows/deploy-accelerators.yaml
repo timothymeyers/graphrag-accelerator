@@ -1,5 +1,7 @@
 name: Deploy Accelerator
 
+# az ad sp create-for-rbac --name "my-github-action-sp" --role contributor --scopes /subscriptions/4a3b6480-8f2b-41b2-9123-46de70d10895
+
 on:
   push:
   workflow_dispatch:
@@ -45,4 +47,7 @@ jobs:
           EOF
           cat ci.parameters.json
 
-          ./deploy.sh -p ci.parameters.json
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}

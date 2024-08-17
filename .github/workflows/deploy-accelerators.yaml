@@ -61,4 +61,5 @@ jobs:
       - name: Clean up
         if: always()
         run: |
-          az group delete --name ${{ env.RESOURCE_GROUP }} --yes --no-wait
+          echo Hi
+          #az group delete --name ${{ env.RESOURCE_GROUP }} --yes --no-wait

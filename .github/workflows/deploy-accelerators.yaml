@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        environment: [Commercial, Government]
+        environment: [Commercial]
         location: [eastus2]
     environment: ${{ matrix.environment }}
 

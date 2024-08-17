@@ -23,6 +23,16 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v2
 
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create resource group and assign RBAC
+        run: |
+          az group create --name ${{ env.RESOURCE_GROUP }} --location ${{ env.LOCATION }}
+          az role assignment create --role "Owner" --assignee "github-action-sp" --resource-group ${{ env.RESOURCE_GROUP }}
+
       - name: Replace environment variable tokens
         env:
           TIM: "Tim"
@@ -44,8 +54,3 @@ jobs:
           }
           EOF
           cat ci.parameters.json
-
-      - name: Log in to Azure
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}

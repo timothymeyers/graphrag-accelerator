@@ -31,7 +31,9 @@ jobs:
       - name: Create resource group and assign RBAC
         run: |
           rgId=$(az group create --name ${{ env.RESOURCE_GROUP }} --location ${{ env.LOCATION }} --query id -o tsv)
-          az role assignment create --role "Owner" --assignee "github-action-sp" --scope $rgId
+          appId=echo ${{ secrets.AZURE_CREDENTIALS }} | jq '.clientId' -r
+
+          az role assignment create --role "Owner" --assignee $appId --scope $rgId
 
       - name: Replace environment variable tokens
         env:
@@ -57,5 +59,6 @@ jobs:
 
 
       - name: Clean up
+        if: always()
         run: |
           az group delete --name ${{ env.RESOURCE_GROUP }} --yes --no-wait

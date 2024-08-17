@@ -57,6 +57,10 @@ jobs:
           EOF
           cat ci.parameters.json
 
+      - name: Deploy Accelerators
+        run: |
+          cd infra
+          ./deploy.sh -g -p ci.parameters.json
 
       - name: Clean up
         if: always()

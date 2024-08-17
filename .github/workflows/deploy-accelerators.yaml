@@ -30,8 +30,8 @@ jobs:
 
       - name: Create resource group and assign RBAC
         run: |
-          az group create --name ${{ env.RESOURCE_GROUP }} --location ${{ env.LOCATION }}
-          az role assignment create --role "Owner" --assignee "github-action-sp" --resource-group ${{ env.RESOURCE_GROUP }}
+          rgId=$(az group create --name ${{ env.RESOURCE_GROUP }} --location ${{ env.LOCATION }} --query id -o tsv)
+          az role assignment create --role "Owner" --assignee "github-action-sp" --scope $rgId
 
       - name: Replace environment variable tokens
         env:
@@ -54,3 +54,8 @@ jobs:
           }
           EOF
           cat ci.parameters.json
+
+
+      - name: Clean up
+        run: |
+          az group delete --name ${{ env.RESOURCE_GROUP }} --yes --no-wait

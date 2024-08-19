@@ -16,6 +16,9 @@ jobs:
         environment: [Commercial, Government]
         dev-mode: [-g]
         location: [eastus2, westus2, usgovarizona]
+        include:
+          - environment: Commercial
+            with-frontend: true
         exclude:
           - environment: Government
             location: eastus2
@@ -99,7 +102,8 @@ jobs:
           cd infra
           ./deploy.sh ${{ matrix.dev-mode }} -p ci.parameters.json
 
-      - name: Obtain APIM keys
+      - name: Set-up front-end deployment
+        if: ${{ matrix.with-frontend == true }}
         run: |
 
           APIM_NAME="$(az apim list --resource-group $RESOURCE_GROUP --query "[0].name" -o tsv)"
@@ -114,10 +118,25 @@ jobs:
 
           URL="${MANAGEMENT_URL}/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.ApiManagement/service/${APIM_NAME}/subscriptions/master/listSecrets?api-version=${API_VERSION}"
 
-          az rest --method POST --uri $URL --query "primaryKey" -o tsv
+          APIM_SUBSCRIPTION_KEY=$(az rest --method POST --uri $URL --query "primaryKey" -o tsv)
+
+          cd infra
+          cat <<EOF > ci-frontend.parameters.json
+          {
+            "APIM_SUBSCRIPTION_KEY": "$APIM_SUBSCRIPTION_KEY",
+            "ALLOW_IP": "${{ secrets.MY_IP }}",
+          }
+          EOF
+
+      - name: deploy frontend
+        if: ${{ matrix.with-frontend == true }}
+        run: |
+          cd infra
+          cp .github/deploy-help/deploy-frontend.sh .
+          ./deploy-frontend.sh ci.parameters.json ci-frontend.parameters.json
 
       - name: Clean up
-        if: always()
+        if: false
         run: |
           #echo Hi
           az group delete --name $RESOURCE_GROUP --yes --no-wait

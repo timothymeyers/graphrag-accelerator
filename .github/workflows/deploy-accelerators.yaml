@@ -67,8 +67,7 @@ jobs:
     steps:
       - name: Set locations
         id: set-output
-        run: |
-          echo "::set-output name=locations::${{ vars.LOCATIONS }}" >> $GITHUB_OUTPUT
+        run: echo "locations=${{ vars.LOCATIONS }}" >> $GITHUB_OUTPUT
 
   matrix-test:
     runs-on: ubuntu-latest

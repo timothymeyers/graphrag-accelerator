@@ -8,15 +8,29 @@ on:
 
 jobs:
 
+  set-locations:
+    runs-on: ubuntu-latest
+    outputs:
+      locations: ${{ steps.set-locations.outputs.locations }}
+    strategy:
+      matrix:
+        environment: [Commercial]
+    steps:
+      - name: Set locations
+        id: set-locations
+        run: |
+          echo "::set-output name=locations::[${{ vars.LOCATION }}]"
+
+
   deploy:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         environment: [Commercial]
-        location: [eastus2,westus2]
+        location: ${{ vars.LOCATIONS }}
     environment: ${{ matrix.environment }}
     env:
-      RESOURCE_GROUP: rg-gr-${{ matrix.environment }}-${{ matrix.location }}-${{ github.run_number }}
+      RESOURCE_GROUP: rg-grci-${{ github.run_number }}-${{ matrix.environment }}-${{ matrix.location }}
       LOCATION: ${{ matrix.location }}
 
     steps:

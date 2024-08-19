@@ -18,12 +18,12 @@ jobs:
         environment: [Commercial, Government]
         dev-mode: [-g]
         location: [eastus2, westus2, usgovarizona]
-        include:
-          - environment: Commercial
-            location: eastus2
-          - environment: Commercial
-            location: westus2
+        exlude:
           - environment: Government
+            location: eastus2
+          - environment: Government
+            location: westus2
+          - environment: Commercial
             location: usgovarizona
 
     environment: ${{ matrix.environment }}

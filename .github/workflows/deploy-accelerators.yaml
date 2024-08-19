@@ -17,6 +17,7 @@ jobs:
         # I hate this - how do i move location info to env vars?
         environment: [Commercial, Government]
         dev-mode: [-g]
+        location: [eastus2, westus2, usgovarizona]
         include:
           - environment: Commercial
             location: eastus2

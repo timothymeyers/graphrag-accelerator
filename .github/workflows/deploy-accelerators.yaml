@@ -17,10 +17,9 @@ jobs:
       - name: Replace environment variable tokens
         env:
           TIM: "Tim"
-          LOCS: ${{ vars.LOCATIONS }}
         run: |
           echo $TIM
-          echo "$LOCS" >> tmp.txt
+          echo "${{ vars.LOCATIONS }}" >> tmp.txt
 
           cat tmp.txt
 

@@ -31,6 +31,11 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           environment: 'azureusgovernment'
 
+      - name: print out rgs
+        run: |
+          az group list --query [].name -o table
+
+
 
   test:
     if: true
@@ -39,6 +44,7 @@ jobs:
     strategy:
       matrix:
         environment: [Commercial, Government]
+        locations: ${{ vars.LOCATIONS }}
     environment: ${{ matrix.environment }}
     steps:
       - name: Replace environment variable tokens

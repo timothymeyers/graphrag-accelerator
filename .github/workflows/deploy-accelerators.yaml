@@ -15,6 +15,7 @@ jobs:
     strategy:
       matrix:
         # I hate this - how do i move location info to env vars?
+        environment: [Commercial, Government]
         dev-mode: [-g]
         include:
           - environment: Commercial

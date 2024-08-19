@@ -14,14 +14,13 @@ jobs:
     strategy:
       matrix:
         environment: [Commercial, Government]
-        location: ${{ vars.LOCATIONS }}
 
     steps:
       - name: Replace environment variable tokens
         run: |
           echo "Hello"
           echo ${{ matrix.environment }}
-          echo ${{ matrix.location }}
+          echo ${{ vars.LOCATIONS }}
           echo "World"
 
   a:

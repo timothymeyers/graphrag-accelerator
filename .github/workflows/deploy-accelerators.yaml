@@ -13,6 +13,7 @@ jobs:
     strategy:
       matrix:
         environment: [Commercial, Government]
+        location: [eastus2, westus2, usgovvirginia, usgovarizona]
         include:
           - environment: Commercial
             location: eastus2

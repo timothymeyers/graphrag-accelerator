@@ -75,13 +75,14 @@ jobs:
     strategy:
       matrix:
         environment: [Commercial, Government]
-        locations: ${{ fromJSON(needs.set-env.outputs.locations) }}
     environment: ${{ matrix.environment }}
+    env:
+      LOCATIONS: ${{ needs.set-env.outputs.locations }}
     steps:
       - name: Replace environment variable tokens
         run: |
           echo "Hello"
-          echo ${{ needs.set-env.outputs.locations }}
+          echo $LOCATIONS
           echo "World"
 
   deploy:

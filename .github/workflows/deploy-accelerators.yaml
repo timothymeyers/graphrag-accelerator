@@ -38,7 +38,7 @@ jobs:
 
 
   test:
-    if: false
+    if: true
     runs-on: ubuntu-latest
     needs: test-login
     strategy:

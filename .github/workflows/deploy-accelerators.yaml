@@ -23,7 +23,9 @@ jobs:
             location: usgovvirginia
           - environment: Government
             location: usgovarizona
+
     environment: ${{ matrix.environment }}
+
     env:
       RESOURCE_GROUP: rg-grci-${{ github.run_number }}-${{ matrix.environment }}-${{ matrix.location }}
     steps:

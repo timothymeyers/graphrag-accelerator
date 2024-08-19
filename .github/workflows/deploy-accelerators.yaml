@@ -10,11 +10,11 @@ jobs:
 
   b:
     runs-on: ubuntu-latest
+    environment: ${{ matrix.environment }}
     strategy:
       matrix:
         environment: [Commercial, Government]
         location: ${{ fromJSON (vars.LOCATIONS) }}
-    environment: ${{ matrix.environment }}
 
     steps:
       - name: Replace environment variable tokens

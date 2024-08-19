@@ -19,11 +19,12 @@ jobs:
       - name: Set locations
         id: set-locations
         run: |
-          echo "::set-output name=locations::[${{ vars.LOCATION }}]"
+          echo "::set-output name=locations::[${{ vars.LOCATIONS }}]"
 
 
   deploy:
     runs-on: ubuntu-latest
+    needs: set-locations
     strategy:
       matrix:
         environment: [Commercial]

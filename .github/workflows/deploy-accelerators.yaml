@@ -8,21 +8,15 @@ on:
 
 jobs:
 
-  test-matrix-strategy:
+  a:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        environment: [Commercial, Government]
-        location: [eastus2, westus2, usgovvirginia, usgovarizona]
         include:
           - environment: Commercial
-            location: eastus2
-          - environment: Commercial
-            location: westus2
+            location: [eastus, westus]
           - environment: Government
-            location: usgovvirginia
-          - environment: Government
-            location: usgovarizona
+            location: [usgovvirginia, usgovtexas]
     steps:
       - name: Replace environment variable tokens
         run: |

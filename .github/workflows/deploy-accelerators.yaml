@@ -14,6 +14,7 @@ jobs:
     strategy:
       matrix:
         # I hate this - how do i move location info to env vars?
+        dev-mode: [-g]
         include:
           - environment: Commercial
             location: eastus2
@@ -83,7 +84,7 @@ jobs:
           {
             $( cat gov.tmp.env )
             "LOCATION": "${{ matrix.location }}",
-            "RESOURCE_GROUP": "${{ env.RESOURCE_GROUP }}",
+            "RESOURCE_GROUP": "$RESOURCE_GROUP",
             "GRAPHRAG_API_BASE": "${{ secrets.GRAPHRAG_API_BASE }}",
             "GRAPHRAG_API_VERSION": "${{ secrets.GRAPHRAG_API_VERSION }}",
             "GRAPHRAG_EMBEDDING_DEPLOYMENT_NAME": "${{ secrets.GRAPHRAG_EMBEDDING_DEPLOYMENT_NAME }}",
@@ -97,7 +98,7 @@ jobs:
       - name: Deploy Accelerators
         run: |
           cd infra
-          ./deploy.sh -g -p ci.parameters.json
+          ./deploy.sh ${{ matrix.dev-mode }} -p ci.parameters.json
 
       - name: Clean up
         if: always()

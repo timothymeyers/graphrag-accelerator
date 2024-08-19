@@ -20,7 +20,9 @@ jobs:
           LOCS: ${{ vars.LOCATIONS }}
         run: |
           echo $TIM
-          echo "$LOCS"
+          echo "$LOCS" >> tmp.txt
+
+          cat tmp.txt
 
   deploy:
     if: false

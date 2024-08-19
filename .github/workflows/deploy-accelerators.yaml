@@ -18,7 +18,7 @@ jobs:
         environment: [Commercial, Government]
         dev-mode: [-g]
         location: [eastus2, westus2, usgovarizona]
-        exlude:
+        exclude:
           - environment: Government
             location: eastus2
           - environment: Government

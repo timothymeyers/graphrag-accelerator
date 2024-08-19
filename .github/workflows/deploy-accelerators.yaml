@@ -27,7 +27,8 @@ jobs:
     environment: ${{ matrix.environment }}
 
     env:
-      RESOURCE_GROUP: rg-grci-${{ github.run_number }}-${{ matrix.environment }}-${{ matrix.location }}
+      RESOURCE_GROUP_STUB: rg-grci-${{ github.run_number }}
+      RESOURCE_GROUP: ""
     steps:
       - name: Check out the repository
         uses: actions/checkout@v2
@@ -47,6 +48,12 @@ jobs:
 
       - name: Create resource group and assign RBAC
         run: |
+          ENV_TRUNC=${{ matrix.environment }}
+          ENV_TRUNC=${ENV_TRUNC:0:3}
+          RESOURCE_GROUP=$RESOURCE_GROUP_STUB-$ENV_TRUNC-${{ matrix.location }}
+
+          echo "RESOURCE_GROUP=$RESOURCE_GROUP" >> "$GITHUB_ENV"
+
           rgId=$(az group create --name ${{ env.RESOURCE_GROUP }} --location ${{ matrix.location }} --query id -o tsv)
           appId=$(az ad sp list --display-name github-action-sp --query [].appId -o tsv)
 

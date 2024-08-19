@@ -8,6 +8,23 @@ on:
 
 jobs:
 
+  test-matrix-strategy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - environment: Commercial
+            location: [eastus, westus]
+          - environment: Government
+            location: [usgovvirginia, usgovtexas]
+    steps:
+      - name: Replace environment variable tokens
+        run: |
+          echo "Hello"
+          echo ${{ matrix.environment }}
+          echo ${{ matrix.location }}
+          echo "World"
+
   test-login:
     if: false
     runs-on: ubuntu-latest
@@ -57,6 +74,7 @@ jobs:
 
   set-env:
     runs-on: ubuntu-latest
+    if: false
     outputs:
       locations: ${{ steps.set-output.outputs.locations }}
     strategy:
@@ -71,6 +89,7 @@ jobs:
 
   matrix-test:
     runs-on: ubuntu-latest
+    if: false
     needs: [set-env]
     strategy:
       matrix:

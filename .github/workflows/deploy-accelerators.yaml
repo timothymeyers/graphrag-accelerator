@@ -8,6 +8,20 @@ on:
 
 jobs:
 
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [Commercial, Government]
+    steps:
+      - name: Replace environment variable tokens
+        env:
+          TIM: "Tim"
+          LOCS: ${{ vars.LOCATIONS }}
+        run: |
+          echo $TIM
+          ECHO "$LOCS"
+
   deploy:
     if: false
     runs-on: ubuntu-latest

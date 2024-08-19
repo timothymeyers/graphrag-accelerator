@@ -71,8 +71,22 @@ jobs:
           env
           echo "::set-output name=locations::${{ vars.LOCATIONS }}" >> $GITHUB_ENV
 
+  matrix-test:
+    runs-on: ubuntu-latest
+    needs: [set-env]
+    strategy:
+      matrix:
+        environment: [Commercial, Government]
+    environment: ${{ matrix.environment }}
+    steps:
+      - name: Replace environment variable tokens
+        run: |
+          echo "Hello"
+          echo ${{ needs.set-env.outputs.locations }}
+          echo "World"
+
   deploy:
-    if: true
+    if: false
     runs-on: ubuntu-latest
     needs: [test-login, set-env, test]
     strategy:

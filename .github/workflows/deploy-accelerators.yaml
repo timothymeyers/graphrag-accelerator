@@ -33,18 +33,17 @@ jobs:
 
       - name: print out rgs
         run: |
-          az group list --query [].name -o table
+          az group list -o table
 
 
 
   test:
-    if: true
+    if: false
     runs-on: ubuntu-latest
     needs: test-login
     strategy:
       matrix:
         environment: [Commercial, Government]
-        locations: ${{ vars.LOCATIONS }}
     environment: ${{ matrix.environment }}
     steps:
       - name: Replace environment variable tokens
@@ -56,13 +55,30 @@ jobs:
 
           cat tmp.txt
 
+  set-env:
+    runs-on: ubuntu-latest
+    outputs:
+      locations: ${{ steps.set-output.outputs.locations }}
+    strategy:
+      matrix:
+        environment: [Commercial, Government]
+    environment: ${{ matrix.environment }}
+
+    steps:
+      - name: Set locations
+        id: set-output
+        run: |
+          env
+          echo "::set-output name=locations::${{ vars.LOCATIONS }}" >> $GITHUB_ENV
+
   deploy:
     if: false
     runs-on: ubuntu-latest
+    needs: [test-login, set-env]
     strategy:
       matrix:
         environment: [Commercial]
-        location: [eastus2, westus2]
+        location: ${{ fromJSON (needs.set-env.outputs.locations) }}
     environment: ${{ matrix.environment }}
     env:
       RESOURCE_GROUP: rg-grci-${{ github.run_number }}-${{ matrix.environment }}-${{ matrix.location }}

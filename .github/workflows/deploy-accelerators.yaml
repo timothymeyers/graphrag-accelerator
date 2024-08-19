@@ -8,10 +8,28 @@ on:
 
 jobs:
 
-  a:
+  b:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        environment: [Commercial, Government]
+        location: ${{ fromJSON (vars.LOCATIONS) }}
+    environment: ${{ matrix.environment }}
+
+    steps:
+      - name: Replace environment variable tokens
+        run: |
+          echo "Hello"
+          echo ${{ matrix.environment }}
+          echo ${{ matrix.location }}
+          echo "World"
+
+  a:
+    if: false
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # I hate this - how do i move location info to env vars?
         include:
           - environment: Commercial
             location: eastus2

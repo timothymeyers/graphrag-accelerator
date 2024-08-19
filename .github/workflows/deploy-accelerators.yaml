@@ -14,9 +14,13 @@ jobs:
       matrix:
         include:
           - environment: Commercial
-            location: [eastus, westus]
+            location: eastus2
+          - environment: Commercial
+            location: westus2
           - environment: Government
-            location: [usgovvirginia, usgovtexas]
+            location: usgovvirginia
+          - environment: Government
+            location: usgovarizona
     steps:
       - name: Replace environment variable tokens
         run: |

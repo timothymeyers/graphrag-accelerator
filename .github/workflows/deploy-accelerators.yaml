@@ -11,6 +11,7 @@ jobs:
   deploy-accelerator:
     if: true
     runs-on: ubuntu-latest
+    continue-on-error: true
     strategy:
       matrix:
         # I hate this - how do i move location info to env vars?

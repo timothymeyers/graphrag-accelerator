@@ -52,12 +52,29 @@ jobs:
 
           az role assignment create --role "Owner" --assignee $appId --scope $rgId
 
+      - name: Get special gov env variables
+        if: ${{ matrix.environment == 'Government' }}
+        run: |
+          cd infra
+          cat <<EOF > gov.tmp.env
+
+            "CLOUD_NAME": "AzureUSGovernment",
+            "AISEARCH_ENDPOINT_SUFFIX": "search.azure.us",
+            "AISEARCH_AUDIENCE": "https://search.azure.us",
+            "GRAPHRAG_COGNITIVE_SERVICES_ENDPOINT":"https://cognitiveservices.azure.us/.default",
+
+          EOF
+
+
       - name: Replace environment variable tokens
         run: |
           cd infra
 
+          touch gov.tmp.env
+
           cat <<EOF > ci.parameters.json
           {
+            $( cat gov.tmp.env )
             "LOCATION": "${{ matrix.location }}",
             "RESOURCE_GROUP": "${{ env.RESOURCE_GROUP }}",
             "GRAPHRAG_API_BASE": "${{ secrets.GRAPHRAG_API_BASE }}",
@@ -78,8 +95,8 @@ jobs:
       - name: Clean up
         if: always()
         run: |
-          echo Hi
-          #az group delete --name ${{ env.RESOURCE_GROUP }} --yes --no-wait
+          #echo Hi
+          az group delete --name ${{ env.RESOURCE_GROUP }} --yes --no-wait
 
 
   test-login:

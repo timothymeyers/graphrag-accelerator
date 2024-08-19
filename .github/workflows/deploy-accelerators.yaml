@@ -131,8 +131,8 @@ jobs:
       - name: deploy frontend
         if: ${{ matrix.with-frontend == true }}
         run: |
+          cp .github/deploy-help/deploy-frontend.sh infra/
           cd infra
-          cp .github/deploy-help/deploy-frontend.sh .
           ./deploy-frontend.sh ci.parameters.json ci-frontend.parameters.json
 
       - name: Clean up

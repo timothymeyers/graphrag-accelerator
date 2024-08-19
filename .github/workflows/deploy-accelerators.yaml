@@ -8,31 +8,6 @@ on:
 
 jobs:
 
-  set-locations:
-    runs-on: ubuntu-latest
-    outputs:
-      locations: ${{ steps.set-locations.outputs.locations }}
-    strategy:
-      matrix:
-        environment: [Commercial]
-    steps:
-      - name: Set locations
-        id: set-locations
-        run: |
-          env
-
-          echo ${{ vars }}
-
-          echo ""
-          echo ""
-          echo ${{ vars.LOCATIONS }}
-          echo ""
-          echo ""
-
-
-          echo "::set-output name=locations::[${{ vars.LOCATIONS }}]" >> $GITHUB_ENV
-
-
   deploy:
     runs-on: ubuntu-latest
     needs: set-locations

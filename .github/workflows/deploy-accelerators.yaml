@@ -101,8 +101,20 @@ jobs:
 
       - name: Obtain APIM keys
         run: |
-          cd infra
-          ./get-apim-keys.sh
+
+          APIM_NAME="$(az apim list --resource-group $RESOURCE_GROUP --query "[0].name" -o tsv)"
+          SUBSCRIPTION_ID=$(az account show --query id --output tsv)
+          API_VERSION="2022-08-01"
+
+          if [ "${{ matrix.environment }}" == "Commercial" ]; then
+            MANAGEMENT_URL="https://management.azure.com"
+          else
+            MANAGEMENT_URL="https://management.usgovcloudapi.net"
+          fi
+
+          URL="${MANAGEMENT_URL}/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.ApiManagement/service/${APIM_NAME}/subscriptions/master/listSecrets?api-version=${API_VERSION}"
+
+          az rest --method POST --uri $URL --query "primaryKey" -o tsv
 
       - name: Clean up
         if: always()

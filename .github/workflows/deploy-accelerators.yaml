@@ -8,21 +8,6 @@ on:
 
 jobs:
 
-  b:
-    runs-on: ubuntu-latest
-    environment: ${{ matrix.environment }}
-    strategy:
-      matrix:
-        environment: [Commercial, Government]
-        locations: ${{ vars.LOCATIONS }}
-
-    steps:
-      - name: Replace environment variable tokens
-        run: |
-          echo "Hello"
-          echo ${{ matrix.environment }}
-          echo "World"
-
   a:
     if: false
     runs-on: ubuntu-latest
@@ -38,15 +23,61 @@ jobs:
             location: usgovvirginia
           - environment: Government
             location: usgovarizona
+    env:
+      RESOURCE_GROUP: rg-grci-${{ github.run_number }}-${{ matrix.environment }}-${{ matrix.location }}
+
     steps:
+      - name: Check out the repository
+        uses: actions/checkout@v2
+
+      - name: Log in to Azure
+        if: ${{ matrix.environment == 'Commercial' }}
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Log in to Azure Government
+        if: ${{ matrix.environment == 'Government' }}
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          environment: 'azureusgovernment'
+
+      - name: Create resource group and assign RBAC
+        run: |
+          rgId=$(az group create --name ${{ env.RESOURCE_GROUP }} --location ${{ matrix.location }} --query id -o tsv)
+          appId=$(az ad sp list --display-name github-action-sp --query [].appId -o tsv)
+
+          az role assignment create --role "Owner" --assignee $appId --scope $rgId
+
       - name: Replace environment variable tokens
         run: |
-          echo "Hello"
-          echo ${{ matrix.environment }}
-          echo ${{ matrix.location }}
-          echo "World"
+          cd infra
 
+          cat <<EOF > ci.parameters.json
+          {
+            "LOCATION": "${{ matrix.location }}",
+            "RESOURCE_GROUP": "${{ env.RESOURCE_GROUP }}",
+            "GRAPHRAG_API_BASE": "${{ secrets.GRAPHRAG_API_BASE }}",
+            "GRAPHRAG_API_VERSION": "${{ secrets.GRAPHRAG_API_VERSION }}",
+            "GRAPHRAG_EMBEDDING_DEPLOYMENT_NAME": "${{ secrets.GRAPHRAG_EMBEDDING_DEPLOYMENT_NAME }}",
+            "GRAPHRAG_EMBEDDING_MODEL": "${{ secrets.GRAPHRAG_EMBEDDING_MODEL }}",
+            "GRAPHRAG_LLM_DEPLOYMENT_NAME": "${{ secrets.GRAPHRAG_LLM_DEPLOYMENT_NAME }}",
+            "GRAPHRAG_LLM_MODEL": "${{ secrets.GRAPHRAG_LLM_MODEL }}"
+          }
+          EOF
+          cat ci.parameters.json
 
+      - name: Deploy Accelerators
+        run: |
+          cd infra
+          ./deploy.sh -g -p ci.parameters.json
+
+      - name: Clean up
+        if: always()
+        run: |
+          echo Hi
+          #az group delete --name ${{ env.RESOURCE_GROUP }} --yes --no-wait
 
 
   test-login:
@@ -57,8 +88,6 @@ jobs:
         environment: [Commercial, Government]
     environment: ${{ matrix.environment }}
     steps:
-      #- name: Check out the repository
-      #  uses: actions/checkout@v2
       - name: Log in to Azure
         if: ${{ matrix.environment == 'Commercial' }}
         uses: azure/login@v1

@@ -62,6 +62,8 @@ jobs:
 
           az role assignment create --role "Owner" --assignee $appId --scope $rgId
 
+          echo Frontend: ${{ matrix.with-frontend }}
+
       - name: Get special gov env variables
         if: ${{ matrix.environment == 'Government' }}
         run: |

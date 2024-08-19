@@ -52,7 +52,7 @@ jobs:
     strategy:
       matrix:
         environment: [Commercial]
-        location: ${{ vars.LOCATIONS }}
+        location: [eastus2, westus2]
     environment: ${{ matrix.environment }}
     env:
       RESOURCE_GROUP: rg-grci-${{ github.run_number }}-${{ matrix.environment }}-${{ matrix.location }}

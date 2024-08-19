@@ -22,8 +22,6 @@ jobs:
           - environment: Commercial
             location: westus2
           - environment: Government
-            location: usgovvirginia
-          - environment: Government
             location: usgovarizona
 
     environment: ${{ matrix.environment }}
@@ -100,6 +98,11 @@ jobs:
         run: |
           cd infra
           ./deploy.sh ${{ matrix.dev-mode }} -p ci.parameters.json
+
+      - name: Obtain APIM keys
+        run: |
+          cd infra
+          ./get-apim-keys.sh
 
       - name: Clean up
         if: always()

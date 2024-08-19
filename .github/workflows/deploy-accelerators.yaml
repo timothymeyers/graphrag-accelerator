@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        environment: [Commercial]
+        environment: [Commercial, Government]
     environment: ${{ matrix.environment }}
     steps:
       #- name: Check out the repository

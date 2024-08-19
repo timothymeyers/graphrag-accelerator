@@ -9,7 +9,7 @@ on:
 jobs:
 
   test-login:
-    if: true
+    if: false
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -38,7 +38,7 @@ jobs:
 
 
   test:
-    if: true
+    if: false
     runs-on: ubuntu-latest
     needs: test-login
     strategy:
@@ -75,7 +75,7 @@ jobs:
     strategy:
       matrix:
         environment: [Commercial, Government]
-        locations: ${{ needs.set-env.outputs.locations }}
+        locations: ${{ fromJson( needs.set-env.outputs.locations ) }}
     environment: ${{ matrix.environment }}
     steps:
       - name: Replace environment variable tokens

@@ -75,6 +75,7 @@ jobs:
     strategy:
       matrix:
         environment: [Commercial, Government]
+        locations: ${{ fromJSON(needs.set-env.outputs.locations) }}
     environment: ${{ matrix.environment }}
     steps:
       - name: Replace environment variable tokens

@@ -19,7 +19,8 @@ jobs:
       - name: Set locations
         id: set-locations
         run: |
-          echo "::set-output name=locations::[${{ vars.LOCATIONS }}]"
+          env
+          echo "::set-output name=locations::[${{ vars.LOCATIONS }}]" >> $GITHUB_ENV
 
 
   deploy:

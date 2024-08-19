@@ -9,7 +9,7 @@ on:
 jobs:
 
   a:
-    if: false
+    if: true
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -104,8 +104,6 @@ jobs:
       - name: print out rgs
         run: |
           az group list -o table
-
-
 
   test:
     if: false

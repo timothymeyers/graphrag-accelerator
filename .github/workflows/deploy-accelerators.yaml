@@ -119,14 +119,16 @@ jobs:
           URL="${MANAGEMENT_URL}/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.ApiManagement/service/${APIM_NAME}/subscriptions/master/listSecrets?api-version=${API_VERSION}"
 
           APIM_SUBSCRIPTION_KEY=$(az rest --method POST --uri $URL --query "primaryKey" -o tsv)
-
+          echo ${APIM_SUBSCRIPTION_KEY}
+          echo ""
           cd infra
           cat <<EOF > ci-frontend.parameters.json
           {
-            "APIM_SUBSCRIPTION_KEY": "$APIM_SUBSCRIPTION_KEY",
-            "ALLOW_IP": "${{ secrets.MY_IP }}",
+            "APIM_SUBSCRIPTION_KEY": "${APIM_SUBSCRIPTION_KEY}",
+            "ALLOW_IP": "${{ secrets.MY_IP }}"
           }
           EOF
+          cat ci-frontend.parameters.json
 
       - name: deploy frontend
         if: ${{ matrix.with-frontend == true }}

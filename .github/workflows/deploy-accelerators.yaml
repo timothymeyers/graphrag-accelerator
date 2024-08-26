@@ -1,7 +1,6 @@
 name: Deploy Accelerator
 
 on:
-  push:
   workflow_dispatch:
 
 jobs:

@@ -1,8 +1,8 @@
 name: Deploy Accelerator
 
 on:
-  push:
   workflow_dispatch:
+  push:
 
 jobs:
 
@@ -16,9 +16,7 @@ jobs:
         environment: [Commercial, Government]
         dev-mode: [-g]
         location: [eastus2, westus2, usgovarizona]
-        include:
-          - environment: Commercial
-            with-frontend: true
+        with-frontend: [true]
         exclude:
           - environment: Government
             location: eastus2

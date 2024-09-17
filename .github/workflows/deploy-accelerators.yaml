@@ -1,7 +1,7 @@
 name: Deploy Accelerator
 
 on:
-  workflow-dispatch:
+  repository_dispatch:
 
 jobs:
 

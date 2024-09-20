@@ -98,7 +98,7 @@ jobs:
       - name: Deploy Accelerators
         run: |
           cd infra
-          sed -i 's/# set -ux/set -ux/' deploy.sh
+          # sed -i 's/# set -ux/set -ux/' deploy.sh
           ./deploy.sh ${{ matrix.dev-mode }} -p ci.parameters.json
 
       - name: Set-up front-end deployment

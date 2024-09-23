@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 #!/usr/bin/env bash
 
-set -ux # uncomment this line to debug
+# set -ux # uncomment this line to debug
 
 # Variables
 #RESOURCE_GROUP="<rg>" # same rg as your backend graphrag deployment
@@ -41,6 +41,9 @@ CONTAINER_NAME="graphrag:frontend" # Default but you should be able to name it a
 
 REGISTRY_SERVER="$(az acr list --resource-group $RESOURCE_GROUP --query "[0].loginServer" -o tsv)"
 REGISTRY_USERNAME="$(az acr list --resource-group $RESOURCE_GROUP --query "[0].name" -o tsv)"
+
+az acr update -n $REGISTRY_USERNAME --admin-enabled true   # New
+
 REGISTRY_PASSWORD="$(az acr credential show --name $REGISTRY_USERNAME --resource-group $RESOURCE_GROUP  --query "passwords[0].value" -o tsv)"
 CONTAINER_IMAGE="$REGISTRY_SERVER/$CONTAINER_NAME"
 
@@ -58,6 +61,7 @@ az acr build --only-show-errors \
   --image $CONTAINER_IMAGE \
   $scriptDir/../
 
+az acr update -n $REGISTRY_USERNAME --admin-enabled false # turn off local admin
 
 # Create an environment for the Container App
 az containerapp env create \
